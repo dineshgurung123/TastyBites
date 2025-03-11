@@ -30,6 +30,7 @@ router.post(
   }
 );
 
+
 router.post("/customerRegister", registerUser)
 router.post("/login", loginUser);
 router.post("/logout", logoutuser);
