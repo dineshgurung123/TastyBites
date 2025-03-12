@@ -1,29 +1,38 @@
-import { Router ,Request, Response} from "express";
+import { Router, Request, Response } from "express";
 import Cart from "../models/cart.model";
-import { addCart } from "../controllers/cartController";
+import { addCart, getCart } from "../controllers/cartController";
 import { authenticationUser } from "../middlewares/authMiddleware";
 
+const router = Router();
 
+router.post("/", authenticationUser, async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.userId;
+    const data = req.body;
 
-const router = Router()
+    const result = await addCart(data, userId);
 
-router.post("/",authenticationUser, async(req: Request, res: Response)=>{
+    res.json(result);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
- try {
-       
-     const userId = req.user?.userId
-    const data = req.body
- 
-  const result = await addCart(data, userId)
+router.get("/", authenticationUser, async(req: Request, res: Response)=>{
+
+try {
+    
+  const cartData = await getCart()
+   if(!cartData){
+      res.status(400).send("error ")
+   }
    
-  res.json(result)
+  res.status(200).json({data: cartData})
 
- } catch (error) {
-    res.send(error)
- }
-
-
+} catch (error) {
+   res.status(400).send(error)
+}
 
 })
 
-export default router
+export default router;
