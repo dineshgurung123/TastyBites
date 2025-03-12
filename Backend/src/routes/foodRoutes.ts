@@ -15,7 +15,7 @@ router.get(
   }
 );
 
-router.post("/", async(req: Request, res: Response)=>{
+router.post("/", authenticationUser, isAdmin,  async(req: Request, res: Response)=>{
             
        try {
         const data  =  req.body

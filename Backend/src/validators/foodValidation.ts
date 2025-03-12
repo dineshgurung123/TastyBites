@@ -8,5 +8,4 @@ price : joi.number().required(),
 category : joi.string().required(),
 imageUrl : joi.string().required()
 
-
 })

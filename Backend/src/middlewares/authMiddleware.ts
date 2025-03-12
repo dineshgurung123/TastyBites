@@ -41,7 +41,7 @@ export const authenticationUser = (
       userType: decoded.userType
     };
 
-    console.log('Authenticated user', req.user);
+   
     next();
   } catch (error) {
     res.status(401).json({ message: "Invalid authToken" });
@@ -50,7 +50,9 @@ export const authenticationUser = (
 
 // Admin-only middleware
 export const isAdmin = (req: Request, res: Response, next: NextFunction): void => {
+  console.log( "here", req.user?.userType)
   if (req.user?.userType !== "admin") {
+    
     res.status(403).json({ message: "Forbidden: only admins can access this" });
     return;
   }
