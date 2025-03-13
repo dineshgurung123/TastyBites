@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes";
 import foodRoutes from "./routes/foodRoutes";
 import dotenv from "dotenv";
 import cartRoutes from "./routes/cartRoutes";
+import orderRoutes from "./routes/ordeRoutes";
 
 //Database connection
 connectDB();
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use("/api/auths", authRoutes);
 app.use("/api/foods", foodRoutes);
 app.use("/api/carts", cartRoutes);
+app.use("/api/orders",  orderRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
