@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Card from './Card'
-import { Link } from 'react-router-dom'
+import Card from '../components/Card' // adjust path based on your project structure
 
-const FeaturedDish = () => {
+const FoodItems = () => {
   const [food, setFood] = useState([])
 
   useEffect(() => {
@@ -20,15 +19,12 @@ const FeaturedDish = () => {
   }, [])
 
   return (
-    <div className="px-4 py-8 max-w-screen-xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-center">Featured Dishes</h2>
-
+    <div className="px-4 pt-28 pb-12 max-w-screen-xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center">All Food Items</h2>
       {food.length > 0 ? (
         <div className="flex flex-wrap justify-center gap-6">
-          {food.slice(0, 8).map((item) => (
-            <Link to={`/foods/${item._id}`} key={item._id}>
-              <Card food={item} />
-            </Link>
+          {food.map((item) => (
+            <Card key={item._id} food={item} />
           ))}
         </div>
       ) : (
@@ -38,4 +34,4 @@ const FeaturedDish = () => {
   )
 }
 
-export default FeaturedDish
+export default FoodItems

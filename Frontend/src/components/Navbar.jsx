@@ -1,7 +1,43 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true); // <== new state
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/api/auths/verify", {
+          withCredentials: true,
+        });
+        if (res.status === 200) {
+          setIsLoggedIn(true);
+        }
+      } catch (err) {
+        setIsLoggedIn(false);
+      } finally {
+        setLoading(false); // done checking
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:3000/api/auths/logout", {}, {
+        withCredentials: true,
+      });
+      setIsLoggedIn(false);
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
+
   return (
     <div className='fixed top-0 left-0 w-full z-50 bg-white text-black flex justify-between items-center h-20 px-9 shadow-md'>
       
@@ -15,7 +51,7 @@ const Navbar = () => {
         <Link to="/" className='px-4 py-2 rounded hover:bg-gray-100 transition duration-300'>
           Home
         </Link>
-        <Link to="#" className='px-4 py-2 rounded hover:bg-gray-100 transition duration-300'>
+        <Link to="/foods" className='px-4 py-2 rounded hover:bg-gray-100 transition duration-300'>
           Food Items
         </Link>
         <Link to="#" className='px-4 py-2 rounded hover:bg-gray-100 transition duration-300'>
@@ -27,14 +63,25 @@ const Navbar = () => {
       </div>
 
       <div className='flex gap-5'>
-        <Link to="#" className='px-4 py-2 border border-black rounded hover:bg-black hover:text-white transition duration-300'>
-          Login
-        </Link>
-        <Link to="#" className='px-4 py-2 bg-green-800 text-white rounded hover:bg-gray-800 ]transition duration-300'>
-          Register
-        </Link>
+        {!loading && (
+          isLoggedIn ? (
+            <button 
+              onClick={handleLogout}
+              className='px-4 py-2 border border-black rounded hover:bg-black hover:text-white transition duration-300'>
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/login" className='px-4 py-2 border border-black rounded hover:bg-black hover:text-white transition duration-300'>
+                Login
+              </Link>
+              <Link to="/register" className='px-4 py-2 bg-green-800 text-white rounded hover:bg-gray-800 transition duration-300'>
+                Register
+              </Link>
+            </>
+          )
+        )}
       </div>
-      
     </div>
   );
 };

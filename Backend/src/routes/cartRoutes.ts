@@ -53,7 +53,6 @@ router.put("/", authenticationUser, async (req: Request, res: Response) => {
   }
 });
 
-
 router.delete(
   "/",
   authenticationUser,
@@ -76,7 +75,6 @@ router.delete(
   }
 );
 
-
 router.delete(
   "/:foodId",
   authenticationUser,
@@ -87,7 +85,7 @@ router.delete(
 
       const cart = await deleteCartItem(foodId, userId);
 
-      res.send({message: 'successfully deleted cart', cart});
+      res.send({ message: "successfully deleted cart", cart });
     } catch (error) {
       res.send(error);
     }
