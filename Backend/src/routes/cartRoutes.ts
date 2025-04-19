@@ -24,7 +24,7 @@ router.post("/", authenticationUser, async (req: Request, res: Response) => {
   }
 });
 
-router.get("/", authenticationUser, async (req: Request, res: Response) => {
+router.get("/",  async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
 

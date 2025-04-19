@@ -54,7 +54,7 @@ const Navbar = () => {
         <Link to="/foods" className='px-4 py-2 rounded hover:bg-gray-100 transition duration-300'>
           Food Items
         </Link>
-        <Link to="#" className='px-4 py-2 rounded hover:bg-gray-100 transition duration-300'>
+        <Link to="/cart" className='px-4 py-2 rounded hover:bg-gray-100 transition duration-300'>
           Cart
         </Link>
         <Link to="/addFood" className='px-4 py-2 rounded hover:bg-gray-100 transition duration-300'>
