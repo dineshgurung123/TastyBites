@@ -6,6 +6,7 @@ import foodRoutes from "./routes/foodRoutes";
 import dotenv from "dotenv";
 import cartRoutes from "./routes/cartRoutes";
 import orderRoutes from "./routes/ordeRoutes";
+import cors from 'cors'
 
 //Database connection
 connectDB();
@@ -17,6 +18,10 @@ dotenv.config();
 //Middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+  origin: "http://localhost:5173", 
+  credentials: true
+}));
 
 //Routes
 app.use("/api/auths", authRoutes);

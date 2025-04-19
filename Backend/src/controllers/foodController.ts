@@ -7,7 +7,7 @@ export const getFood = async() => {
 
     return  await Food.find()
 }
-
+     
 export const addFood = async(food: IFood) => {
   
    try {
