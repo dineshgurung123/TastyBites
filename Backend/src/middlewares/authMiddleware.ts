@@ -39,6 +39,7 @@ export const authenticationUser = (
     req.user = {
       userId: decoded.userId,
       userType: decoded.userType
+      
     };
 
    

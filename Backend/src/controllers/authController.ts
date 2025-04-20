@@ -3,6 +3,7 @@ import { registerValidation } from "../validators/authValidation";
 import User from "../models/user.model";
 import bcrypt from "bcryptjs";
 import Jwt from "jsonwebtoken";
+import { sendEmail } from "../services/mailer"; // Adjust the path if needed
 
 // Register User
 export const registerUser = async (
@@ -37,6 +38,13 @@ export const registerUser = async (
       userType,
     });
 
+    // 📨 Send welcome email
+    await sendEmail({
+      to: email,
+      subject: "Welcome to TastyBites!",
+      message: `<h2>Hi ${name},</h2><p>Thanks for registering at <strong>TastyBites</strong>! 🍔<br />Enjoy exploring our platform.</p>`,
+    });
+
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
@@ -67,7 +75,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       { expiresIn: "1h" }
     );
 
-   
     // Set cookie
     res.cookie("AuthToken", token, {
       httpOnly: true,
@@ -82,7 +89,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// Verify User (check if logged in and return role/type)
+// Verify User
 export const verifyUser = (req: Request, res: Response): void => {
   const token = req.cookies.AuthToken;
 
