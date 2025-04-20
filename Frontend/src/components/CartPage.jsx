@@ -38,9 +38,13 @@ const CartPage = () => {
   // PLACE ORDER
   const handlePlaceOrder = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/orders", {}, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/api/orders",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
 
       setCartItems([]); // Clear cart after successful order
       alert("Order placed successfully!");
@@ -68,7 +72,10 @@ const CartPage = () => {
         <div>
           <div className="space-y-4">
             {cartItems?.map((item) => (
-              <div key={item._id} className="flex justify-between items-center p-4 border-b">
+              <div
+                key={item._id}
+                className="flex justify-between items-center p-4 border-b"
+              >
                 <div className="flex items-center">
                   <div>
                     <h2 className="text-lg font-semibold">{item.name}</h2>
