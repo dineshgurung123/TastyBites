@@ -1,69 +1,116 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
+import React from "react";
 
 const Register = () => {
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    userType: "user",
+    userType: "customer",
   });
+
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
+      const res = await axios.post(
         "http://localhost:3000/api/auths/customerRegister",
-        form
+        formData,
+        { withCredentials: true }
       );
-      alert("Registered successfully");
+      setMessage(res.data.message);
     } catch (err) {
-      alert(err);
+      setMessage(err.response?.data?.message || "Something went wrong");
     }
   };
 
   return (
-    <div className="pt-28 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Register</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div style={styles.container}>
+      <h2 style={styles.heading}>Customer Register</h2>
+      {message && <p style={styles.message}>{message}</p>}
+      <form onSubmit={handleSubmit} style={styles.form}>
         <input
+          type="text"
           name="name"
-          placeholder="Name"
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="w-full border p-2"
+          placeholder="Full Name"
+          value={formData.name}
+          onChange={handleChange}
           required
+          style={styles.input}
         />
         <input
+          type="email"
           name="email"
           placeholder="Email"
-          type="email"
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          className="w-full border p-2"
+          value={formData.email}
+          onChange={handleChange}
           required
+          style={styles.input}
         />
         <input
+          type="password"
           name="password"
           placeholder="Password"
-          type="password"
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          className="w-full border p-2"
+          value={formData.password}
+          onChange={handleChange}
           required
+          style={styles.input}
         />
-        <select
-          name="userType"
-          value={form.userType}
-          onChange={(e) => setForm({ ...form, userType: e.target.value })}
-          className="w-full border p-2"
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-        <button className="w-full bg-green-600 text-white py-2 rounded">
-          Register
-        </button>
+        <button type="submit" style={styles.button}>Register</button>
       </form>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    maxWidth: "400px",
+    margin: "80px auto",
+    padding: "30px",
+    background: "#f7f9fc",
+    borderRadius: "12px",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+    fontFamily: "Arial, sans-serif",
+  },
+  heading: {
+    textAlign: "center",
+    marginBottom: "20px",
+    color: "#333",
+  },
+  message: {
+    textAlign: "center",
+    color: "#ff4d4f",
+    marginBottom: "15px",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
+  },
+  input: {
+    padding: "10px",
+    borderRadius: "6px",
+    border: "1px solid #ccc",
+    fontSize: "16px",
+    outline: "none",
+    transition: "border-color 0.3s",
+  },
+  button: {
+    padding: "12px",
+    borderRadius: "6px",
+    border: "none",
+    backgroundColor: "#4CAF50",
+    color: "#fff",
+    fontSize: "16px",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+  },
 };
 
 export default Register;

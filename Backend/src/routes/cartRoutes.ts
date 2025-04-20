@@ -15,7 +15,7 @@ router.post("/", authenticationUser, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
     const data = req.body;
-
+  
     const result = await addCart(data, userId);
 
     res.json(result);
@@ -24,7 +24,7 @@ router.post("/", authenticationUser, async (req: Request, res: Response) => {
   }
 });
 
-router.get("/",  async (req: Request, res: Response) => {
+router.get("/", authenticationUser, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
 

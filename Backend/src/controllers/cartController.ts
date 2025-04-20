@@ -4,10 +4,8 @@ import { cartValidation } from "../validators/cartValidation";
 import { Food } from "../models/food.model";
 
 export const addCart = async (cartItem: CartItem, userId?: string) => {
- 
-  
-  const {error} = cartValidation.validate(cartItem);
-console.log(error)
+  const { error } = cartValidation.validate(cartItem);
+
   if (error) {
     return error;
   }
@@ -39,83 +37,75 @@ console.log(error)
   return cart;
 };
 
+export const getCart = async (userId?: string) => {
+  const cart = await Cart.findOne({ userId });
 
-
-export const getCart = async (userId ?: string) => {
-  const cart  = await Cart.findOne({userId});
-
-  if(!cart){
-    return ;
+  if (!cart) {
+    return;
   }
 
-  return cart
+  return cart;
 };
 
-
-
-export const updateCart = async(data : CartItem, userId ?:string) =>{
-
+export const updateCart = async (data: CartItem, userId?: string) => {
   try {
-    
-    let cart = await Cart.findOne({userId})
+    let cart = await Cart.findOne({ userId });
 
-    if(!cart){
-      return
+    if (!cart) {
+      return;
     }
 
-    const item = cart.items.find(item => item.foodId.toString()=== data.foodId.toString())
-   
-    if(!item){
-      return
+    const item = cart.items.find(
+      (item) => item.foodId.toString() === data.foodId.toString()
+    );
+
+    if (!item) {
+      return;
     }
 
-    item.quantity = data.quantity
+    item.quantity = data.quantity;
 
-    const total = cart.items.reduce((sum, item)=> sum + item.price * item.quantity ,0)
+    const total = cart.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
 
-    await cart.save()
+    await cart.save();
 
-    return cart
+    return cart;
   } catch (error) {
-     return error
+    return error;
   }
+};
 
-}
-
-
-export const clearCart = async(userId ?: String) =>{
-         
-  
- try {
-  
-     await Cart.findOneAndDelete({userId})
-    return  Cart
- } catch (error) {
-
-  return error
-  
- }
-}
-
-export const deleteCartItem = async(foodId ?: string, userId ?: string ) =>{
-
+export const clearCart = async (userId?: String) => {
   try {
-    
-    let cart =  await Cart.findOne({userId})
-    
-   if(!cart){
-   return null
-  }
-
-    cart.items = cart.items.filter(item => item.foodId.toString() !== foodId?.toString())
-    cart.total = cart.items.reduce((sum, item)=> sum + item.price * item.quantity, 0)
-     
-    cart.save()
-    return cart
-
+    await Cart.findOneAndDelete({ userId });
+    return Cart;
   } catch (error) {
-    
-    return error
+    return error;
   }
+};
 
-}
+export const deleteCartItem = async (foodId?: string, userId?: string) => {
+  try {
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      return null;
+    }
+
+    cart.items = cart.items.filter(
+      (item) => item.foodId.toString() !== foodId?.toString()
+    );
+    cart.total = cart.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
+    cart.save();
+    return cart;
+  } catch (error) {
+    return error;
+  }
+};

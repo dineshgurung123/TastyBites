@@ -18,30 +18,28 @@ const FoodDetail = () => {
 
     fetchFood()
   }, [id])
-
   const handleAddToCart = async () => {
+    const cartData = {
+      foodId: food._id,  
+      name: food.name,
+      price: food.price,
+      quantity: 1,  
+    };
+  
     try {
-      const response = await axios.post("http://localhost:3000/api/carts", {
-        foodId: food._id
-      })
-      alert("Added to cart successfully!")
+      // Remove localStorage logic - cookies are handled automatically
+      await axios.post(
+        "http://localhost:3000/api/carts", 
+        cartData, 
+        { withCredentials: true } // Keep this
+      );
+      alert("Added to cart successfully!");
     } catch (error) {
-      console.error("Error adding to cart:", error)
-      alert("Failed to add to cart.")
+      console.error("Error adding to cart:", error);
+      alert("Failed to add to cart.");
     }
-  }
+  };
 
-  const handleOrderNow = async () => {
-    try {
-      const response = await axios.post("http://localhost:3000/api/orders", {
-        foodId: food._id
-      })
-      alert("Order placed successfully!")
-    } catch (error) {
-      console.error("Error placing order:", error)
-      alert("Failed to place order.")
-    }
-  }
 
   if (!food) {
     return <p className="text-center mt-10 text-gray-500">Loading food details...</p>
@@ -60,19 +58,14 @@ const FoodDetail = () => {
       <p className="text-md font-medium text-gray-600 mb-6">Category: {food.category}</p>
 
       {/* Buttons */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 justify-center">
         <button
           onClick={handleAddToCart}
           className="px-6 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-200"
         >
           Add to Cart
         </button>
-        <button
-          onClick={handleOrderNow}
-          className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-200"
-        >
-          Order Now
-        </button>
+      
       </div>
     </div>
   )

@@ -1,98 +1,101 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const CartPage = () => {
-  const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
 
-  // Fetch cart data on component mount
+  // GET Cart Items
   useEffect(() => {
-    const fetchCart = async () => {
+    const fetchCartItems = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/carts', { withCredentials: true });
-        setCart(res.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Error fetching cart data');
-        setLoading(false);
+        const response = await axios.get("http://localhost:3000/api/carts", {
+          withCredentials: true,
+        });
+        setCartItems(response.data.data?.items || []);
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+        alert("Failed to load cart. Please login first!");
       }
     };
 
-    fetchCart();
+    fetchCartItems();
   }, []);
 
-  // Handle updating cart items
-  const handleUpdateCart = async (itemId, newQuantity) => {
+  // DELETE Cart Item
+  const handleRemoveItem = async (cartId) => {
     try {
-      const updatedItem = {
-        foodId: itemId,
-        quantity: newQuantity,
-      };
-
-      const res = await axios.put('http://localhost:3000/api/cart', updatedItem, { withCredentials: true });
-      setCart(res.data); // Assuming the response includes the updated cart
-    } catch (err) {
-      setError('Error updating cart item');
+      await axios.delete(`http://localhost:3000/api/carts/${cartId}`, {
+        withCredentials: true,
+      });
+      setCartItems(cartItems.filter((item) => item._id !== cartId));
+      alert("Item removed from cart!");
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
+      alert("Failed to remove item. Please try again.");
     }
   };
 
-  // Handle removing an item from the cart
-  const handleRemoveItem = async (itemId) => {
+  // PLACE ORDER
+  const handlePlaceOrder = async () => {
     try {
-      await axios.delete(`http://localhost:3000/api/cart/${itemId}`, { withCredentials: true });
-      setCart((prevCart) => ({
-        ...prevCart,
-        items: prevCart.items.filter((item) => item.foodId !== itemId),
-      }));
-    } catch (err) {
-      setError('Error removing cart item');
+      const response = await axios.post("http://localhost:3000/api/orders", {}, {
+        withCredentials: true,
+      });
+
+      setCartItems([]); // Clear cart after successful order
+      alert("Order placed successfully!");
+      console.log("Order Response:", response.data);
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Failed to place order. Please try again.");
     }
   };
 
-  // Handle checkout (example, you can customize the logic)
-  const handleCheckout = () => {
-    navigate('/checkout');
+  const calculateTotal = () => {
+    return cartItems.reduce(
+      (total, item) => total + (item.price || 0) * (item.quantity || 0),
+      0
+    );
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
 
   return (
-    <div className="cart-page">
-      <h1>Your Cart</h1>
-      {cart && cart.items.length > 0 ? (
-        <div>
-          {cart.items.map((item) => (
-            <div key={item.foodId} className="cart-item">
-              <h3>{item.name}</h3>
-              <p>Price: ${item.price}</p>
-              <div>
-                <label>Quantity:</label>
-                <input
-                  type="number"
-                  value={item.quantity}
-                  min="1"
-                  onChange={(e) => handleUpdateCart(item.foodId, e.target.value)}
-                />
-              </div>
-              <button onClick={() => handleRemoveItem(item.foodId)}>Remove</button>
-            </div>
-          ))}
-          <div className="total">
-            <h3>Total: ${cart.total}</h3>
-          </div>
-          <button onClick={handleCheckout}>Checkout</button>
-        </div>
+    <div className="max-w-4xl mx-auto mt-24 px-4 py-10 bg-white shadow-md rounded-lg">
+      <h1 className="text-3xl font-bold mb-6 text-center">Your Cart</h1>
+
+      {cartItems?.length === 0 ? (
+        <p className="text-center text-gray-500">Your cart is empty.</p>
       ) : (
-        <p>Your cart is empty</p>
+        <div>
+          <div className="space-y-4">
+            {cartItems?.map((item) => (
+              <div key={item._id} className="flex justify-between items-center p-4 border-b">
+                <div className="flex items-center">
+                  <div>
+                    <h2 className="text-lg font-semibold">{item.name}</h2>
+                    <p className="text-gray-600">Price: Rs. {item.price}</p>
+                    <p className="text-gray-600">Quantity: {item.quantity}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleRemoveItem(item._id)}
+                  className="px-4 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition duration-200"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-between items-center mt-6">
+            <h2 className="text-xl font-bold">Total: Rs. {calculateTotal()}</h2>
+            <button
+              onClick={handlePlaceOrder}
+              className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-200 cursor-pointer"
+            >
+              Place Order
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

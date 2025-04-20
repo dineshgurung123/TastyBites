@@ -67,6 +67,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       { expiresIn: "1h" }
     );
 
+   
     // Set cookie
     res.cookie("AuthToken", token, {
       httpOnly: true,

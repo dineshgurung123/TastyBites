@@ -21,7 +21,7 @@ export const authenticationUser = (
   next: NextFunction
 ): void => {
   const token = req.cookies.AuthToken;
-  
+  console.log(token)
 
   if (!token) {
     res.status(401).json({ message: "Unauthorized" });
