@@ -12,7 +12,7 @@ const FoodDetail = () => {
         const response = await axios.get(`http://localhost:3000/api/foods/${id}`)
         setFood(response.data.data)
       } catch (error) {
-        console.error("Error fetching food details:", error)
+        console.error("Error fetching food details: ", error)
       }
     }
 
@@ -36,7 +36,7 @@ const FoodDetail = () => {
       alert("Added to cart successfully!");
     } catch (error) {
       console.error("Error adding to cart:", error);
-      alert("Failed to add to cart.");
+      alert("Please login first!");
     }
   };
 
@@ -61,7 +61,7 @@ const FoodDetail = () => {
       <div className="flex gap-4 justify-center">
         <button
           onClick={handleAddToCart}
-          className="px-6 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-200"
+          className="px-6 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-200 cursor-pointer"
         >
           Add to Cart
         </button>

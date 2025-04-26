@@ -14,7 +14,6 @@ const CartPage = () => {
         setCartItems(response.data.data?.items || []);
       } catch (error) {
         console.error("Error fetching cart items:", error);
-        alert("Failed to load cart. Please login first!");
       }
     };
 
@@ -35,6 +34,28 @@ const CartPage = () => {
     }
   };
 
+ 
+  const handleUpdateQuantity = async (itemId, newQuantity, foodId) => {
+    try {
+      if (newQuantity < 1) return; 
+
+      await axios.put(
+        "http://localhost:3000/api/carts",
+        { foodId, quantity: newQuantity },
+        { withCredentials: true }
+      );
+
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
+          item._id === itemId ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    } catch (error) {
+      console.error("Error updating cart item:", error);
+      alert("Failed to update item. Please try again.");
+    }
+  };
+
   // PLACE ORDER
   const handlePlaceOrder = async () => {
     try {
@@ -46,7 +67,7 @@ const CartPage = () => {
         }
       );
 
-      setCartItems([]); // Clear cart after successful order
+      setCartItems([]); // Clear cart after order
       alert("Order placed successfully!");
       console.log("Order Response:", response.data);
     } catch (error) {
@@ -71,18 +92,45 @@ const CartPage = () => {
       ) : (
         <div>
           <div className="space-y-4">
-            {cartItems?.map((item) => (
+            {cartItems.map((item) => (
               <div
                 key={item._id}
                 className="flex justify-between items-center p-4 border-b"
               >
-                <div className="flex items-center">
-                  <div>
-                    <h2 className="text-lg font-semibold">{item.name}</h2>
-                    <p className="text-gray-600">Price: Rs. {item.price}</p>
-                    <p className="text-gray-600">Quantity: {item.quantity}</p>
+                <div>
+                  <h2 className="text-lg font-semibold">{item.name}</h2>
+                  <p className="text-gray-600">Price: Rs. {item.price}</p>
+
+                  <div className="text-gray-600 flex items-center gap-2 mt-1">
+                    Quantity:
+                    <button
+                      onClick={() =>
+                        handleUpdateQuantity(
+                          item._id,
+                          item.quantity - 1,
+                          item.foodId
+                        )
+                      }
+                      className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                    >
+                      -
+                    </button>
+                    <span>{item.quantity}</span>
+                    <button
+                      onClick={() =>
+                        handleUpdateQuantity(
+                          item._id,
+                          item.quantity + 1,
+                          item.foodId
+                        )
+                      }
+                      className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
+
                 <button
                   onClick={() => handleRemoveItem(item._id)}
                   className="px-4 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition duration-200"
@@ -97,7 +145,7 @@ const CartPage = () => {
             <h2 className="text-xl font-bold">Total: Rs. {calculateTotal()}</h2>
             <button
               onClick={handlePlaceOrder}
-              className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-200 cursor-pointer"
+              className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-200"
             >
               Place Order
             </button>

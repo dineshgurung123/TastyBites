@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import React from "react";
+import {useNavigate} from "react-router-dom"
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Register = () => {
     userType: "customer",
   });
 
+  const navigate = useNavigate()
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
@@ -24,7 +26,14 @@ const Register = () => {
         formData,
         { withCredentials: true }
       );
-      setMessage(res.data.message);
+      setMessage("Registered Successfuly");
+      
+      setTimeout(()=>{
+
+      
+        navigate('/')
+      }, 1000)
+
     } catch (err) {
       setMessage(err.response?.data?.message || "Something went wrong");
     }
@@ -32,7 +41,7 @@ const Register = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>Customer Register</h2>
+      <h2 style={styles.heading}> Register</h2>
       {message && <p style={styles.message}>{message}</p>}
       <form onSubmit={handleSubmit} style={styles.form}>
         <input

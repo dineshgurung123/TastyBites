@@ -14,6 +14,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(res.data)); // Saving user data
       alert("Login successful");
       navigate('/');
+    
     } catch (err) {
       alert("Invalid credentials");
     }
