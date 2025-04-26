@@ -19,18 +19,13 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS configuration
+// Updated CORS configuration to allow only live frontend
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://tasty-bites-ten.vercel.app"],
-    methods: ["GET", "POST", "PUT", "DELETE"], // Ensure methods are allowed
-    allowedHeaders: ["Content-Type", "Authorization"], 
-    credentials: true,
+    origin: "https://tasty-bites-ten.vercel.app",  // Only allow live frontend
+    credentials: true,  // Allow cookies
   })
 );
-
-
-app.options("*", cors());
 
 // Routes
 app.use("/api/auths", authRoutes);
