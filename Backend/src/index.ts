@@ -8,29 +8,37 @@ import cartRoutes from "./routes/cartRoutes";
 import orderRoutes from "./routes/ordeRoutes";
 import cors from "cors";
 
-//Database connection
+// Database connection
 connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 dotenv.config();
 
-//Middleware
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
+
+// CORS configuration
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://tasty-bites-ten.vercel.app"],
+    methods: ["GET", "POST", "PUT", "DELETE"], // Ensure methods are allowed
+    allowedHeaders: ["Content-Type", "Authorization"], 
     credentials: true,
   })
 );
 
-//Routes
+
+app.options("*", cors());
+
+// Routes
 app.use("/api/auths", authRoutes);
 app.use("/api/foods", foodRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
