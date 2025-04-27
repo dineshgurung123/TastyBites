@@ -9,7 +9,8 @@ const FeaturedDish = () => {
   useEffect(() => {
     const fetchFood = async () => {
       try {
-        const response = await axios.get("https://tastybites-2-gcm4.onrender.com/api/foods")
+        const response = await axios.get("https://tastybites-1-m4zl.onrender.com/api/foods")
+        
         setFood(response.data.data)
       } catch (error) {
         console.error("Error fetching food:", error)

@@ -19,11 +19,10 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
-// Updated CORS configuration to allow only live frontend
 app.use(
   cors({
-    origin: "https://tasty-bites-ten.vercel.app",  // Only allow live frontend
-    credentials: true,  // Allow cookies
+    origin: "https://tasty-bites-ten.vercel.app",  
+    credentials: true,  
   })
 );
 
