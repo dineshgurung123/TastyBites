@@ -22,7 +22,12 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Allow all origins (CORS open)
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://tasty-bites-ten.vercel.app"],  
+    credentials: true,  
+  })
+);
 
 // Routes
 app.use("/api/auths", authRoutes);

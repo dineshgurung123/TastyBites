@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import Card from './Card'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Card from "./Card";
+import { Link } from "react-router-dom";
 
 const FeaturedDish = () => {
-  const [food, setFood] = useState([])
+  const [food, setFood] = useState([]);
 
   useEffect(() => {
     const fetchFood = async () => {
       try {
-        const response = await axios.get("https://tastybites-2-gcm4.onrender.com/api/foods")
-        setFood(response.data.data)
+        const response = await axios.get(
+          "https://tastybites-2-gcm4.onrender.com/api/foods"
+        );
+        setFood(response.data.data);
       } catch (error) {
-        console.error("Error fetching food:", error)
+        console.error("Error fetching food :", error.toString());
       }
-    }
+    };
 
-    fetchFood()
-  }, [])
+    fetchFood();
+  }, []);
 
   return (
     <div className="px-4 py-8 max-w-screen-xl mx-auto">
@@ -35,7 +37,7 @@ const FeaturedDish = () => {
         <p className="text-center text-gray-500">Loading...</p>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default FeaturedDish
+export default FeaturedDish;
