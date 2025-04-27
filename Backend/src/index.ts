@@ -8,23 +8,21 @@ import cartRoutes from "./routes/cartRoutes";
 import orderRoutes from "./routes/ordeRoutes";
 import cors from "cors";
 
+// Load environment variables
+dotenv.config();
+
 // Database connection
 connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-dotenv.config();
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: "https://tasty-bites-ten.vercel.app",  
-    credentials: true,  
-  })
-);
+// Allow all origins (CORS open)
+app.use(cors());
 
 // Routes
 app.use("/api/auths", authRoutes);
