@@ -12,7 +12,7 @@ const FeaturedDish = () => {
         const response = await axios.get(
           "https://tastybites-2-gcm4.onrender.com/api/foods",
           {
-            withCredentials: true, // Send cookies if needed
+            withCredentials: true, 
             headers: {
               "Content-Type": "application/json",
             },
