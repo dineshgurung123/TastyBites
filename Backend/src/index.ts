@@ -8,40 +8,23 @@ import cartRoutes from "./routes/cartRoutes";
 import orderRoutes from "./routes/ordeRoutes";
 import cors from "cors";
 
-// Load environment variables
-dotenv.config();
-
 // Database connection
 connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-
-app.set("trust proxy", 1);
-
-// CORS configuration
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://tasty-bites-ten.vercel.app" 
-];
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-    
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Blocked by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+dotenv.config();
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: "https://tasty-bites-ten.vercel.app",  
+    credentials: true,  
+  })
+);
 
 // Routes
 app.use("/api/auths", authRoutes);
@@ -51,5 +34,5 @@ app.use("/api/orders", orderRoutes);
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

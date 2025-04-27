@@ -10,8 +10,13 @@ const FeaturedDish = () => {
     const fetchFood = async () => {
       try {
         const response = await axios.get(
-          "https://tastybites-2-gcm4.onrender.com/api/foods"
-
+          "https://tastybites-2-gcm4.onrender.com/api/foods",
+          {
+            withCredentials: true, // Send cookies if needed
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
         setFood(response.data.data);
       } catch (error) {
