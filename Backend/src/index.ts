@@ -21,7 +21,10 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://tasty-bites-ten.vercel.app",  
+    origin: [
+      "https://tasty-bites-ten.vercel.app",  
+      "http://localhost:5173",  
+    ],
     credentials: true,  
   })
 );
