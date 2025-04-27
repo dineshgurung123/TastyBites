@@ -19,6 +19,7 @@ const AddFood = () => {
         const res = await axios.get("https://tastybites-2-gcm4.onrender.com/api/auths/verify", {
           withCredentials: true, // this ensures cookies are sent
         });
+        
 
         console.log(res.data.userType);
         if (res.data?.userType === "admin") {

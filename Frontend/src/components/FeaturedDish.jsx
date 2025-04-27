@@ -11,6 +11,7 @@ const FeaturedDish = () => {
       try {
         const response = await axios.get(
           "https://tastybites-2-gcm4.onrender.com/api/foods"
+
         );
         setFood(response.data.data);
       } catch (error) {
