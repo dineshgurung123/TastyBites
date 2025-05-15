@@ -8,7 +8,7 @@ const Logout = () => {
   useEffect(() => {
     const performLogout = async () => {
       try {
-        await axios.post('http://localhost:3000/api/auths/logout', {}, {
+        await axios.post('https://tastybites-nepal.onrender.com/api/auths/logout', {}, {
           withCredentials: true
         });
         navigate('/login'); // Redirect to login after logout

@@ -8,7 +8,7 @@ const CartPage = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/carts", {
+        const response = await axios.get("https://tastybites-nepal.onrender.com/api/carts", {
           withCredentials: true,
         });
         setCartItems(response.data.data?.items || []);
@@ -23,7 +23,7 @@ const CartPage = () => {
   // DELETE Cart Item
   const handleRemoveItem = async (cartId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/carts/${cartId}`, {
+      await axios.delete(`https://tastybites-nepal.onrender.com/api/carts/${cartId}`, {
         withCredentials: true,
       });
       setCartItems(cartItems.filter((item) => item._id !== cartId));
@@ -40,7 +40,7 @@ const CartPage = () => {
       if (newQuantity < 1) return; 
 
       await axios.put(
-        "http://localhost:3000/api/carts",
+        "https://tastybites-nepal.onrender.com/api/carts",
         { foodId, quantity: newQuantity },
         { withCredentials: true }
       );
@@ -60,7 +60,7 @@ const CartPage = () => {
   const handlePlaceOrder = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/orders",
+        "https://tastybites-nepal.onrender.com/api/orders",
         {},
         {
           withCredentials: true,

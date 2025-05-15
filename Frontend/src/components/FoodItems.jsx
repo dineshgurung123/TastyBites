@@ -9,7 +9,7 @@ const FoodItems = () => {
   useEffect(() => {
     const fetchFood = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/foods")
+        const response = await axios.get("https://tastybites-nepal.onrender.com/api/foods")
         setFood(response.data.data)
       } catch (error) {
         console.error("Error fetching food:", error)

@@ -22,7 +22,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auths/customerRegister",
+        "https://tastybites-nepal.onrender.com/api/auths/customerRegister",
         formData,
         { withCredentials: true }
       );

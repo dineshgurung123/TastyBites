@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const checkAuth = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/auths/verify", {
+      const res = await axios.get("https://tastybites-nepal.onrender.com/api/auths/verify", {
         withCredentials: true,
       });
       setIsLoggedIn(res.status === 200);
@@ -29,7 +29,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:3000/api/auths/logout", {}, {
+      await axios.post("https://tastybites-nepal.onrender.com/api/auths/logout", {}, {
         withCredentials: true,
       });
       setIsLoggedIn(false);

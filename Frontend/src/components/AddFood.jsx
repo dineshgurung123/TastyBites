@@ -16,7 +16,7 @@ const AddFood = () => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/auths/verify", {
+        const res = await axios.get("https://tastybites-nepal.onrender.com/api/auths/verify", {
           withCredentials: true, // this ensures cookies are sent
         });
 
@@ -48,7 +48,7 @@ const AddFood = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/foods",
+        "https://tastybites-nepal.onrender.com/api/foods",
         foodData,
         {
           withCredentials: true, // ensures cookies (auth token) are sent

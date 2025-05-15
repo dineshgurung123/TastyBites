@@ -9,7 +9,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/api/auths/login", form , {withCredentials : true});
+      const res = await axios.post("https://tastybites-nepal.onrender.com/api/auths/login", form , {withCredentials : true});
    
       localStorage.setItem("user", JSON.stringify(res.data)); // Saving user data
       alert("Login successful");

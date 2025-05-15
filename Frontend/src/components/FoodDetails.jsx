@@ -9,7 +9,7 @@ const FoodDetail = () => {
   useEffect(() => {
     const fetchFood = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/foods/${id}`)
+        const response = await axios.get(`https://tastybites-nepal.onrender.com/api/foods/${id}`)
         setFood(response.data.data)
       } catch (error) {
         console.error("Error fetching food details: ", error)
@@ -29,7 +29,7 @@ const FoodDetail = () => {
     try {
       // Remove localStorage logic - cookies are handled automatically
       await axios.post(
-        "http://localhost:3000/api/carts", 
+        "https://tastybites-nepal.onrender.com/api/carts", 
         cartData, 
         { withCredentials: true } // Keep this
       );
