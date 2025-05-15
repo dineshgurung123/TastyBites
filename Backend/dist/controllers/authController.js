@@ -12,38 +12,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logoutUser = exports.verifyUser = exports.loginUser = exports.registerUser = void 0;
+exports.verifyUser = exports.logoutUser = exports.loginUser = exports.registerUser = void 0;
 const authValidation_1 = require("../validators/authValidation");
 const user_model_1 = __importDefault(require("../models/user.model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const mailer_1 = require("../services/mailer"); // Adjust the path if needed
-// Register User
+const mailer_1 = require("../services/mailer");
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, password, userType } = req.body;
-        // Validate request
         const { error } = authValidation_1.registerValidation.validate(req.body);
         if (error) {
             res.status(400).json({ message: error.details[0].message });
             return;
         }
-        // Check for existing user
         const existingUser = yield user_model_1.default.findOne({ email });
         if (existingUser) {
             res.status(400).json({ message: "User already exists" });
             return;
         }
-        // Hash password
         const hashPassword = yield bcryptjs_1.default.hash(password, 10);
-        // Create and save new user
         const newUser = yield user_model_1.default.create({
             name,
             email,
             password: hashPassword,
             userType,
         });
-        // 📨 Send welcome email
         yield (0, mailer_1.sendEmail)({
             to: email,
             subject: "Welcome to TastyBites!",
@@ -56,7 +50,6 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.registerUser = registerUser;
-// Login User
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
@@ -70,14 +63,12 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(400).json({ message: "Password does not match" });
             return;
         }
-        // Generate token
         const token = jsonwebtoken_1.default.sign({ userId: user._id, userType: user.userType }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        // Set cookie
         res.cookie("AuthToken", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-            maxAge: 3600000, // 1 hour
+            secure: true,
+            sameSite: "none",
+            maxAge: 3600000,
         });
         res.status(200).json({ message: "Login successful", token });
     }
@@ -86,7 +77,16 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.loginUser = loginUser;
-// Verify User
+const logoutUser = (req, res) => {
+    res.cookie("AuthToken", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(0),
+    });
+    res.status(200).json({ message: "Logged out successfully" });
+};
+exports.logoutUser = logoutUser;
 const verifyUser = (req, res) => {
     const token = req.cookies.AuthToken;
     if (!token) {
@@ -102,12 +102,3 @@ const verifyUser = (req, res) => {
     }
 };
 exports.verifyUser = verifyUser;
-// Logout User
-const logoutUser = (req, res) => {
-    res.cookie("AuthToken", "", {
-        httpOnly: true,
-        expires: new Date(0),
-    });
-    res.status(200).json({ message: "Logged out successfully" });
-};
-exports.logoutUser = logoutUser;
